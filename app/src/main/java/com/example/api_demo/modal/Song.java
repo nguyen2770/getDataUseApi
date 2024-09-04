@@ -1,6 +1,8 @@
 package com.example.api_demo.modal;
 
-public class Song {
+import java.io.Serializable;
+
+public class Song implements Serializable {
     private String id;
     private String title;
     private String album;
@@ -104,4 +106,21 @@ public class Song {
     public void setReplay(int replay) {
         this.replay = replay;
     }
+
+    // ghi đè equals và hashcode để xử lý nhận list trong button next và pre
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Song song = (Song) obj;
+
+        return id != null ? id.equals(song.id) : song.id == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
+
 }
