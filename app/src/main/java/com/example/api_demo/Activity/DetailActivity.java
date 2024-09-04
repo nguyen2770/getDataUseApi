@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -28,9 +29,12 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class DetailActivity extends AppCompatActivity {
 
-    ImageView img_DetailImage, imgv_play, imgv_pre, imgv_next;
+    ImageView  imgv_play, imgv_pre, imgv_next;
+    CircleImageView img_DetailImage;
     TextView txt_DetailNameSong, txt_DetailNameTG, txt_playerPosition, txt_playerDuration;
     SeekBar seekBarTime;
     private Song currentSong;
@@ -104,10 +108,11 @@ public class DetailActivity extends AppCompatActivity {
                 if (mediaPlayer != null && mediaPlayer.isPlaying()) {
                     mediaPlayer.pause();
                     imgv_play.setImageResource(R.drawable.baseline_play_arrow_24);
+                    stopAnimationMusic();
                 } else {
                     mediaPlayer.start();
-
                     imgv_play.setImageResource(R.drawable.baseline_pause_24);
+                    startAnimationMusic();
                 }
             }
         });
@@ -191,6 +196,7 @@ public class DetailActivity extends AppCompatActivity {
                             Thread.sleep(1000);
                         }
 
+
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
@@ -212,6 +218,8 @@ public class DetailActivity extends AppCompatActivity {
         txt_playerDuration.setText(sduration);
         System.out.println(currentSongIndex);
         playSong(song.getSource());
+        img_DetailImage.setRotation(0);
+        startAnimationMusic();
     }
 
 //    private void playSong(String musicUrl) {
@@ -270,6 +278,23 @@ public class DetailActivity extends AppCompatActivity {
         return String.format("%02d:%02d",
                 TimeUnit.SECONDS.toMinutes(duration),
                 duration % 60);
+    }
+
+    private void startAnimationMusic(){
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                img_DetailImage.animate().rotationBy(360).withEndAction(this).setDuration(10000)
+                        .setInterpolator(new LinearInterpolator()).start();
+            }
+
+        };
+        img_DetailImage.animate().rotationBy(360).withEndAction(runnable).setDuration(10000)
+                .setInterpolator(new LinearInterpolator()).start();
+    }
+
+    private void stopAnimationMusic(){
+        img_DetailImage.animate().cancel();
     }
 
 

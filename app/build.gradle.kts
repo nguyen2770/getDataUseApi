@@ -50,4 +50,7 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.15.1")
     annotationProcessor("com.github.bumptech.glide:compiler:4.15.1")
 
+    // thư viện hiển thị hảnh hình tròn
+    implementation ("de.hdodenhof:circleimageview:3.1.0")
+
 }
